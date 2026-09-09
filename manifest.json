@@ -1,0 +1,10 @@
+{
+  "name": "Ladacam — Laboratório de Análise de Dados",
+  "short_name": "Ladacam",
+  "description": "Iniciativa independente de pesquisa e análise de dados em Cachoeiras de Macacu.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0f172a",
+  "orientation": "portrait"
+}

@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Ladacam - Laboratório de Análise de Dados de Cachoeiras de Macacu. Iniciativa independente de pesquisa interdisciplinar.">
+    <title>Ladacam — Pesquisa e Dados</title>
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0f172a">
+    
+    <!-- Tipografia -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ==========================================================================
+           Variáveis e Reset (Design System)
+           ========================================================================== */
+        :root {
+            --primary: #0f172a;       /* Escuro Institucional */
+            --secondary: #0ea5e9;     /* Destaque Científico */
+            --bg-main: #ffffff;
+            --bg-alt: #f8fafc;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --border: #e2e8f0;
+            --radius: 8px;
+            --transition: all 0.3s ease;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        html { scroll-behavior: smooth; font-size: 16px; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text-dark);
+            background: var(--bg-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3 { color: var(--primary); font-weight: 800; line-height: 1.2; }
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+        
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .section { padding: 100px 0; }
+        .bg-alt { background-color: var(--bg-alt); }
+        .text-center { text-align: center; }
+
+        /* ==========================================================================
+           Botões e CTAs
+           ========================================================================== */
+        .btn {
+            display: inline-block;
+            padding: 14px 32px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            border: none;
+            font-size: 1rem;
+        }
+        
+        .btn-primary {
+            background-color: var(--secondary);
+            color: #fff;
+            box-shadow: 0 4px 14px rgba(14, 165, 233, 0.3);
+        }
+        
+        .btn-primary:hover {
+            background-color: #0284c7;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(14, 165, 233, 0.4);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: #fff;
+        }
+
+        /* ==========================================================================
+           Navegação (Sticky Header)
+           ========================================================================== */
+        header {
+            position: fixed;
+            top: 0; width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+            padding: 15px 0;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo { font-size: 1.5rem; font-weight: 800; color: var(--primary); letter-spacing: -1px; }
+        
+        .nav-links { display: flex; gap: 30px; align-items: center; }
+        .nav-links a { font-weight: 600; color: var(--text-light); transition: var(--transition); font-size: 0.9rem;}
+        .nav-links a:hover { color: var(--secondary); }
+        
+        .menu-toggle { display: none; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--primary); }
+
+        /* ==========================================================================
+           Hero Section (Destaque Principal)
+           ========================================================================== */
+        .hero {
+            padding: 160px 0 100px;
+            background: linear-gradient(180deg, var(--bg-alt) 0%, var(--bg-main) 100%);
+            text-align: center;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            background: #e2e8f0;
+            color: #475569;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 24px;
+        }
+
+        .hero h1 { font-size: 3.5rem; letter-spacing: -1.5px; margin-bottom: 16px; color: var(--primary); }
+        .hero h2 { font-size: 1.25rem; color: var(--secondary); margin-bottom: 24px; font-weight: 600; }
+        .hero p { font-size: 1.15rem; color: var(--text-light); max-width: 650px; margin: 0 auto 40px; }
+        
+        .hero-actions { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
+
+        /* ==========================================================================
+           Grid e Cards (Seccionais e Princípios)
+           ========================================================================== */
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+        .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+
+        .section-header { text-align: center; margin-bottom: 60px; max-width: 700px; margin-inline: auto; }
+        .section-header h2 { font-size: 2.5rem; letter-spacing: -1px; margin-bottom: 16px; }
+        .section-header p { color: var(--text-light); font-size: 1.1rem; }
+
+        .card {
+            background: #fff;
+            border: 1px solid var(--border);
+            padding: 32px;
+            border-radius: var(--radius);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card:hover { transform: translateY(-5px); box-shadow: 0 12px 24px rgba(0,0,0,0.06); border-color: var(--secondary); }
+        .card-tag { font-size: 0.75rem; font-weight: 800; color: var(--secondary); letter-spacing: 1px; margin-bottom: 16px; display: block;}
+        .card h3 { font-size: 1.25rem; margin-bottom: 12px; }
+        .card p { font-size: 0.95rem; color: var(--text-light); }
+
+        /* ==========================================================================
+           Fluxo Metodológico
+           ========================================================================== */
+        .method-flow {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--primary);
+            padding: 40px;
+            border-radius: var(--radius);
+            color: #fff;
+            overflow-x: auto;
+        }
+        
+        .flow-step { text-align: center; min-width: 100px; }
+        .flow-step span { display: block; font-size: 0.75rem; color: var(--secondary); font-weight: 700; margin-bottom: 8px; text-transform: uppercase;}
+        .flow-step strong { font-size: 1.1rem; }
+        .flow-arrow { color: var(--text-light); font-size: 1.5rem; }
+
+        /* ==========================================================================
+           Tabela de Seleção
+           ========================================================================== */
+        .table-container { max-width: 600px; margin: 40px auto 0; background: #fff; border-radius: var(--radius); border: 1px solid var(--border); overflow: hidden; }
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th, td { padding: 16px 24px; border-bottom: 1px solid var(--border); }
+        th { background: var(--bg-alt); font-weight: 700; color: var(--primary); }
+        tfoot td { background: var(--primary); color: #fff; font-weight: 700; }
+
+        /* ==========================================================================
+           Rodapé
+           ========================================================================== */
+        footer { background: var(--primary); color: #fff; padding: 60px 0 30px; }
+        .footer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 40px; margin-bottom: 30px; }
+        .footer-brand h2 { color: #fff; margin-bottom: 8px; }
+        .footer-brand p { color: var(--text-light); }
+        .footer-links { display: flex; gap: 40px; justify-content: flex-end;}
+        .footer-links ul li { margin-bottom: 12px; }
+        .footer-links a { color: var(--text-light); transition: var(--transition); }
+        .footer-links a:hover { color: var(--secondary); }
+        .footer-bottom { text-align: center; font-size: 0.85rem; color: var(--text-light); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;}
+
+        /* ==========================================================================
+           Responsividade
+           ========================================================================== */
+        @media (max-width: 992px) {
+            .hero h1 { font-size: 2.8rem; }
+            .grid-2, .grid-4, .grid-3 { grid-template-columns: 1fr 1fr; }
+            .footer-grid { grid-template-columns: 1fr; }
+            .footer-links { justify-content: flex-start; }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none; flex-direction: column; position: absolute;
+                top: 70px; left: 0; width: 100%; background: #fff;
+                padding: 20px 0; border-bottom: 1px solid var(--border);
+                box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            }
+            .nav-links.active { display: flex; }
+            .menu-toggle { display: block; }
+            
+            .hero { padding: 120px 0 60px; }
+            .hero h1 { font-size: 2.2rem; }
+            .grid-2, .grid-4, .grid-3 { grid-template-columns: 1fr; }
+            
+            .method-flow { flex-direction: column; gap: 20px; }
+            .flow-arrow { transform: rotate(90deg); }
+            
+            .footer-links { flex-direction: column; gap: 20px; }
+            .footer-bottom { justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- CABEÇALHO -->
+    <header>
+        <div class="container nav-container">
+            <a href="#" class="logo">Ladacam</a>
+            <button class="menu-toggle" id="menu-btn">☰</button>
+            <nav class="nav-links" id="nav-links">
+                <a href="#sobre">Sobre</a>
+                <a href="#seccionais">Seccionais</a>
+                <a href="#metodo">Método</a>
+                <a href="#selecao">Seleção</a>
+                <a href="#" class="btn btn-primary cta-inscricao" style="padding: 8px 20px;">Inscreva-se</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <div class="container">
+            <span class="status-badge">Fase de Estruturação</span>
+            <h1>Laboratório de Análise<br>de Dados</h1>
+            <h2>Pesquisa • Dados • Formação Científica</h2>
+            <p>Uma iniciativa independente dedicada à pesquisa empírica, análise rigorosa de dados e formação científica interdisciplinar em Cachoeiras de Macacu.</p>
+            <div class="hero-actions">
+                <a href="#sobre" class="btn btn-outline">Conhecer o Laboratório</a>
+                <a href="#" class="btn btn-primary cta-inscricao">Inscreva-se no Processo</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- SOBRE E AUTONOMIA -->
+    <section id="sobre" class="section">
+        <div class="container grid-2">
+            <div>
+                <h2 style="font-size: 2rem; margin-bottom: 16px;">Independência Intelectual</h2>
+                <p style="color: var(--text-light); margin-bottom: 16px;">O Ladacam é concebido como uma iniciativa independente com regulamento e organização próprios. Nosso foco é fomentar o pensamento analítico através de processamento de dados e produção de evidências verificáveis.</p>
+                <p style="color: var(--text-light);">Eventuais relações com instituições públicas ou privadas ocorrerão mediante instrumentos formais, <strong>sem interferência indevida</strong> na escolha de projetos, metodologias ou publicação de resultados.</p>
+            </div>
+            <div style="background: var(--bg-alt); padding: 40px; border-radius: var(--radius); border-left: 4px solid var(--secondary);">
+                <h3 style="margin-bottom: 16px;">Nossos Princípios</h3>
+                <ul style="color: var(--text-light); display: grid; gap: 12px;">
+                    <li>✓ Rigor metodológico e replicabilidade</li>
+                    <li>✓ Transparência em todas as fases</li>
+                    <li>✓ Interdisciplinaridade analítica</li>
+                    <li>✓ Reconhecimento das limitações</li>
+                    <li>✓ O método orienta a conclusão</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIONAIS -->
+    <section id="seccionais" class="section bg-alt">
+        <div class="container">
+            <div class="section-header">
+                <h2>Quatro Áreas de Investigação</h2>
+                <p>Nenhuma área temática possui prioridade sobre a outra. As seccionais funcionam como eixos equivalentes de pesquisa da realidade.</p>
+            </div>
+            <div class="grid-4">
+                <div class="card">
+                    <span class="card-tag">SECCIONAL 01</span>
+                    <h3>Sociais</h3>
+                    <p>Sociedade, política, economia, território, administração pública, demografia e políticas públicas.</p>
+                </div>
+                <div class="card">
+                    <span class="card-tag">SECCIONAL 02</span>
+                    <h3>Exatas</h3>
+                    <p>Matemática, estatística, programação, análise de dados, modelagem quantitativa e sistemas.</p>
+                </div>
+                <div class="card">
+                    <span class="card-tag">SECCIONAL 03</span>
+                    <h3>Naturais</h3>
+                    <p>Biologia, ecologia, geografia física, meio ambiente, clima e recursos naturais.</p>
+                </div>
+                <div class="card">
+                    <span class="card-tag">SECCIONAL 04</span>
+                    <h3>Artísticas</h3>
+                    <p>Artes visuais, música, literatura, audiovisual, patrimônio e análise de manifestações culturais.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- METODOLOGIA -->
+    <section id="metodo" class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2>A ciência começa com uma pergunta</h2>
+                <p>No Ladacam, a conclusão jamais predetermina o método. Seguimos um fluxo lógico estrito para a produção de relatórios e publicações.</p>
+            </div>
+            <div class="method-flow">
+                <div class="flow-step"><span>Passo 01</span><strong>Pergunta</strong></div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step"><span>Passo 02</span><strong>Dados</strong></div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step"><span>Passo 03</span><strong>Método</strong></div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step"><span>Passo 04</span><strong>Análise</strong></div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step"><span>Passo 05</span><strong>Conclusão</strong></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROCESSO SELETIVO -->
+    <section id="selecao" class="section bg-alt">
+        <div class="container">
+            <div class="section-header">
+                <h2>O ingresso é seletivo</h2>
+                <p>Avaliamos o raciocínio analítico, a capacidade de interpretação de dados e a maturidade científica do candidato em três etapas rigorosas.</p>
+            </div>
+            
+            <div class="grid-3">
+                <div class="card">
+                    <span class="card-tag">ETAPA 1</span>
+                    <h3>Projeto de Pesquisa</h3>
+                    <p>Submissão de problema, hipótese, justificativa, fontes de dados e metodologia pretendida.</p>
+                </div>
+                <div class="card">
+                    <span class="card-tag">ETAPA 2</span>
+                    <h3>Prova Prática</h3>
+                    <p>Análise de um conjunto de dados inédito: limpeza, identificação de padrões e cálculo de estatísticas.</p>
+                </div>
+                <div class="card">
+                    <span class="card-tag">ETAPA 3</span>
+                    <h3>Banca Avaliadora</h3>
+                    <p>Defesa oral do projeto. Avaliação de coerência, argumentação e capacidade de reconhecer vieses.</p>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Critério de Avaliação</th>
+                            <th>Pontuação</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabela-corpo">
+                        <!-- Gerado via JS -->
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td>Total Máximo</td>
+                            <td>100 pontos</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <p class="text-center" style="margin-top: 16px; font-size: 0.9rem; color: var(--text-light);">Nota mínima de aprovação: <strong id="nota-minima">70</strong> pontos.</p>
+            
+            <div class="text-center" style="margin-top: 40px;">
+                <a href="#" class="btn btn-primary btn-lg cta-inscricao" style="font-size: 1.1rem; padding: 18px 40px;">Inscreva-se Agora</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- RODAPÉ -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <h2>Ladacam</h2>
+                    <p>Laboratório de Análise de Dados de Cachoeiras de Macacu</p>
+                    <p style="font-size: 0.85rem; margin-top: 16px; opacity: 0.7;">Os dados inseridos no formulário são protegidos e utilizados exclusivamente para administração do processo seletivo.</p>
+                </div>
+                <div class="footer-links">
+                    <ul>
+                        <li><a href="#sobre">Institucional</a></li>
+                        <li><a href="#seccionais">Áreas de Pesquisa</a></li>
+                        <li><a href="#selecao">Processo Seletivo</a></li>
+                    </ul>
+                    <ul>
+                        <li><a href="#" class="cta-inscricao" style="color: var(--secondary); font-weight: 700;">Inscrição</a></li>
+                        <li><a href="#" id="link-repositorio" style="display: none;">Repositório de Dados</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; <span id="ano-atual"></span> Ladacam. Iniciativa independente em estruturação.</p>
+                <a href="#" id="link-linkedin" style="display: none;" target="_blank">LinkedIn</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ==========================================================================
+         JAVASCRIPT CENTRALIZADO
+         ========================================================================== -->
+    <script>
+        /**
+         * CONFIGURAÇÕES GERAIS DO LADACAM
+         * Edite os valores abaixo conforme necessário.
+         */
+        const CONFIG = {
+            // INSIRA AQUI O LINK REAL DO GOOGLE FORMS:
+            linkInscricao: "", 
+            
+            linkLinkedin: "", 
+            linkRepositorio: "", 
+            
+            pontuacao: [
+                { etapa: "Projeto de pesquisa", pontos: 30 },
+                { etapa: "Prova prática de análise de dados", pontos: 50 },
+                { etapa: "Banca / entrevista", pontos: 20 }
+            ],
+            notaMinima: 70,
+            anoAtual: new Date().getFullYear()
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Atualizar Ano
+            document.getElementById('ano-atual').textContent = CONFIG.anoAtual;
+
+            // 2. Configurar Botões de Inscrição (CTAs)
+            const ctas = document.querySelectorAll('.cta-inscricao');
+            ctas.forEach(btn => {
+                if (CONFIG.linkInscricao && CONFIG.linkInscricao.trim() !== "") {
+                    btn.href = CONFIG.linkInscricao;
+                    btn.target = "_blank";
+                    btn.rel = "noopener noreferrer";
+                } else {
+                    btn.href = "#";
+                    btn.textContent = "Inscrições em Estruturação";
+                    btn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        alert("O processo seletivo encontra-se em estruturação. O formulário de inscrição será disponibilizado em breve.");
+                    });
+                }
+            });
+
+            // 3. Links Sociais e Repositório
+            const linkedin = document.getElementById('link-linkedin');
+            if (CONFIG.linkLinkedin) {
+                linkedin.href = CONFIG.linkLinkedin;
+                linkedin.style.display = "inline-block";
+            }
+
+            const repositorio = document.getElementById('link-repositorio');
+            if (CONFIG.linkRepositorio) {
+                repositorio.href = CONFIG.linkRepositorio;
+                repositorio.style.display = "block";
+            }
+
+            // 4. Renderizar Tabela de Pontuação
+            const tbody = document.getElementById('tabela-corpo');
+            CONFIG.pontuacao.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td>${item.etapa}</td><td>${item.pontos}</td>`;
+                tbody.appendChild(tr);
+            });
+            document.getElementById('nota-minima').textContent = CONFIG.notaMinima;
+
+            // 5. Lógica do Menu Mobile
+            const menuBtn = document.getElementById('menu-btn');
+            const navLinks = document.getElementById('nav-links');
+            
+            menuBtn.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+                menuBtn.textContent = navLinks.classList.contains('active') ? '✕' : '☰';
+            });
+
+            // Fechar menu ao clicar num link
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', () => {
+                    navLinks.classList.remove('active');
+                    menuBtn.textContent = '☰';
+                });
+            });
+
+            // 6. Registro do Service Worker (PWA)
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', () => {
+                    navigator.serviceWorker.register('./sw.js')
+                        .catch(err => console.log('SW não registrado (funciona normalmente online)', err));
+                });
+            }
+        });
+    </script>
+</body>
+</html>
